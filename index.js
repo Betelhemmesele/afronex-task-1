@@ -3,11 +3,12 @@ const mongoose = require("mongoose");
 const app = express();
 const authRouter = require("./routes/auth.routes.js"); 
 const blogRouter =require("./routes/blogpost.routes.js");
+const userUpdate=require("./routes/user.routes.js")
+
 const cors = require('cors');
 const User = require("./models/user.js");
 const Blog = require("./models/blog.js");
 const cookieParser =require('cookie-parser');
-
 require("dotenv").config();
 
 app.use(express.json());
@@ -20,6 +21,7 @@ app.use(cors({
 
 app.use("/api", authRouter);
 app.use("/api",blogRouter);
+app.use("/api",userUpdate);
 // app.use("/api", taskRouter);
 // app.use("/api",userUpdate);
 
