@@ -2,19 +2,50 @@ const BlogPost = require('../models/blog');
 // POST /blogposts - Create a new blog post
 const createBlogPost = async (req, res) => {
   try {
-    const { title, excerpt, content, date, categories, user } = req.body;
+    const { title, excerpt, content, date, categories,imageUrls, user } = req.body;
     const blogPost = new BlogPost({
       title,
       excerpt,
       content,
       date,
       categories,
+      imageUrls,
       user
     });
     await blogPost.save();
     res.status(201).json(blogPost);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
+  }
+};
+const getBlogs = async (req, res, next) => {
+  try {
+    const { userId } = req.query;
+
+    const blogs = await BlogPost.find({ user: userId });
+
+    res.json(blogs);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+// Get a specific task for a user
+const getBlog = async (req, res, next) => {
+  try {
+    const { userId } = req.query;
+    const blogId = req.params.id;
+
+    const blog = await BlogPost.findOne({ _id: blogId, user: userId });
+    console.log("iddd",userId,"hhh" ,blogId)
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
+
+    res.json(blog);
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };
 
@@ -37,6 +68,7 @@ const getBlogPostById = async (req, res) => {
       .populate('user', 'username')
       .populate('comments.user', 'username');
       console.log("user",blogPost.user);
+      console.log("id",req.params.id)
     if (!blogPost) {
       return res.status(404).json({ error: 'Blog post not found' });
     }
@@ -58,18 +90,20 @@ const updateBlogPost = async (req, res) => {
       return res.status(404).json({ error: 'you can only update yours'});
   }
   try {
-    const { title, excerpt, content, date, categories } = req.body;
+    const { title, excerpt, content, date, categories,imageUrls } = req.body;
     const blogPost = await BlogPost.findByIdAndUpdate(req.params.id, {
       title,
       excerpt,
       content,
       date,
-      categories
+      categories,
+      imageUrls
     });
     
     res.json(blogPost);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
+    console.log(error)
   }
 };
 
@@ -83,10 +117,11 @@ const deleteBlogPost = async (req, res) => {
     return res.status(404).json({ error: 'you can only update yours'});
 }
   try {
-    const blogPost = await BlogPost.findByIdAndRemove(req.params.id);
+    const blogPost = await BlogPost.findByIdAndDelete(req.params.id);
     res.json({ message: 'Blog post deleted' });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
+    console.log(error);
   }
 };
 // POST /blogposts/:postId/comments - Add a new comment to a blog post
@@ -94,6 +129,7 @@ const addComment = async (req, res) => {
     try {
       const { content, user, date } = req.body;
       const blogPost = await BlogPost.findById(req.params.postId);
+      console.log("id",req.params.postId);
       if (!blogPost) {
         return res.status(404).json({ error: 'Blog post not found' });
       }
@@ -134,27 +170,33 @@ const addComment = async (req, res) => {
   const deleteComment = async (req, res) => {
     try {
       const blogPost = await BlogPost.findById(req.params.postId);
+     
       if (!blogPost) {
         return res.status(404).json({ error: 'Blog post not found' });
       }
       const comment = blogPost.comments.id(req.params.commentId);
+      
       if (!comment) {
         return res.status(404).json({ error: 'Comment not found' });
       }
-      comment.remove();
+      blogPost.comments.pull(comment._id);
       await blogPost.save();
       res.json(blogPost);
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
+      console.log(error);
     }
   };
+  
 module.exports = {
     getAllBlogPosts,
     getBlogPostById, 
     createBlogPost,
     updateBlogPost,
     deleteBlogPost,
+    getBlogs,
+    getBlog,
     addComment,
     updateComment,
-    deleteComment
+    deleteComment,
 }

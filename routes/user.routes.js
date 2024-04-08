@@ -1,0 +1,10 @@
+const express =require('express');
+const router=express.Router();
+const { verifyToken } =require( '../utils/verifyUser.js');
+const {test,updateUser,deleteUser,getUserBlogs,getUser} =require( '../controllers/userController.js');
+router.get('/test',test );
+router.put('/update/:id',verifyToken,updateUser);
+router.delete('/delete/:id',verifyToken,deleteUser);
+router.get('/tasks/:id',verifyToken,getUserBlogs);
+router.get('/:id',getUser);
+module.exports= router;
