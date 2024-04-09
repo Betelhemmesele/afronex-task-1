@@ -37,7 +37,6 @@ const getBlog = async (req, res, next) => {
     const blogId = req.params.id;
 
     const blog = await BlogPost.findOne({ _id: blogId, user: userId });
-    console.log("iddd",userId,"hhh" ,blogId)
     if (!blog) {
       return res.status(404).json({ message: 'Blog not found' });
     }
@@ -67,8 +66,6 @@ const getBlogPostById = async (req, res) => {
     const blogPost = await BlogPost.findById(req.params.id)
       .populate('user', 'username')
       .populate('comments.user', 'username');
-      console.log("user",blogPost.user);
-      console.log("id",req.params.id)
     if (!blogPost) {
       return res.status(404).json({ error: 'Blog post not found' });
     }
@@ -121,7 +118,6 @@ const deleteBlogPost = async (req, res) => {
     res.json({ message: 'Blog post deleted' });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
-    console.log(error);
   }
 };
 // POST /blogposts/:postId/comments - Add a new comment to a blog post

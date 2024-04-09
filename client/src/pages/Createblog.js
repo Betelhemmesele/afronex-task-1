@@ -123,7 +123,7 @@ export default function CreateBlog() {
   }
 
   return (
-    <main className="p-3 mx-auto pb-10 pt-9 max-w-4xl">
+    <main className="p-3 mx-auto mb-11 pt-9 max-w-4xl">
        <h1 className="text-3xl font-semibold text-center my-7">create Blog Posts</h1>
        <form  onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
        <div className="flex flex-col gap-3 flex-1">

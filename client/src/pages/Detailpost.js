@@ -6,6 +6,7 @@ import {Swiper ,SwiperSlide} from 'swiper/react';
 import SwiperCore from 'swiper';
 import { Navigation } from "swiper/modules";
 import 'swiper/css/bundle';
+import {  FaTag} from 'react-icons/fa';
 const DetailsPage = () => {
   const { postId } = useParams();
   const [blogPost, setBlogPost] = useState(null);
@@ -136,14 +137,14 @@ const handleCancelEdit = () => {
 
 
   return (
-    <div className="pt-[50px] mb-[100px] mx-[500px]">
+    <div className="pt-[20px] mb-[100px] mx-[500px]">
       <h3 className="text-xl pt-8 pb-11 font-bold">{blogPost.title}</h3>
       <div className="border border-gray-300 rounded-md mb-4">
         <div className="z-0 mb-4">
           <Swiper navigation>
             {blogPost.imageUrls.map((url) => (
               <SwiperSlide key={url}>
-                <img src={url} alt={blogPost.title} className="w-[900px] h-auto" /> 
+                <img src={url} alt={blogPost.title} className="w-[900px] h-[700px]" /> 
               </SwiperSlide>
             ))}
           </Swiper>
@@ -151,6 +152,15 @@ const handleCancelEdit = () => {
         <div className="ml-7 mb-4">
           <p>{formatDate(blogPost.createdAt)}</p>
           <p>{blogPost.content}</p>
+          <div className="float-card text-black mt-2">
+  {blogPost.categories.map((category, index) => (
+    <div className="flex items-center" key={index}>
+      <FaTag className="mr-2 text-gray-600" />
+      <p className="text-gray-600">{category}</p>
+    </div>
+  ))}
+</div>
+        
           <p className="text-gray-500 mt-2">Written by: {blogPost.user.username}</p>
         </div>
       </div>

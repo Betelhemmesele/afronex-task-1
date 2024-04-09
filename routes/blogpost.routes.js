@@ -7,13 +7,18 @@ const { getAllBlogPosts,
     deleteBlogPost,
     addComment,
     updateComment,
-    deleteComment } = require('../controllers/blogPostController.js');
+    deleteComment,
+    getBlogs,
+    getBlog,
+ } = require('../controllers/blogPostController.js');
 const {verifyToken}=require('../utils/verifyUser.js');
-router.get('/blogposts',verifyToken, getAllBlogPosts);
-router.get('/blogposts/:id',verifyToken, getBlogPostById);
+router.get('/blogposts', getAllBlogPosts);
+router.get('/blogposts/:id',getBlogPostById);
+router.get('/getblogposts', verifyToken, getBlogs);
+router.get('/getblogpost/:id',verifyToken, getBlog);
 router.post('/blogposts',verifyToken, createBlogPost);
-router.put('/blogposts/:id',verifyToken, updateBlogPost);
-router.delete('/blogposts/:id',verifyToken, deleteBlogPost);
+router.put('/updateblogposts/:id',verifyToken, updateBlogPost);
+router.delete('/deleteblogposts/:id',verifyToken, deleteBlogPost);
 router.post('/blogposts/:postId/comments',verifyToken, addComment);
 router.put('/blogposts/:postId/comments/:commentId',verifyToken, updateComment);
 router.delete('/blogposts/:postId/comments/:commentId',verifyToken, deleteComment);

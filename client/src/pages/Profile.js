@@ -6,7 +6,7 @@ import {app} from '../firebase';
 import {Link }from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import {getStorage,ref, getDownloadURL,uploadBytesResumable} from 'firebase/storage';
-
+import { logout } from '../redux/reducers/auth';
 export default function Profile() {
  const currentUser = useSelector(state => state.auth.user);
  const fileRef=useRef(null);
@@ -110,6 +110,26 @@ const closeConfirmation = () => {
 const handleShowListings = () => {
   navigate('/blog-listing');
 };
+const handleLogout= async ()=>{
+  try {
+    
+    const res = await fetch(`http://localhost:8003/api/signout`, {
+      method: 'GET',
+      credentials: 'include', 
+    });
+    const data = await res.json();
+    if (data.success === false) {
+  
+      return;
+    }
+    dispatch(logout(data));
+    navigate('/signin');
+    console.log("success");
+  } catch (error) {
+   
+    console.log(error.message);
+  }
+}
   return (
     <div className="p-6 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7"> Profile</h1>
@@ -194,8 +214,10 @@ const handleShowListings = () => {
         
       </div>
     )}
+     <button className='text-red-600'
+     onClick={handleLogout}>logout</button>
            </div>
-      
+     
       <p> {updateSuccess? 'user updated successfully':" "}</p>
    
       </div>

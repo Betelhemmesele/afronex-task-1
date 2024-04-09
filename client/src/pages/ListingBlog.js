@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-// import UpdateBlog from './Updateblog';
 import { FaCalendarAlt, FaTag} from 'react-icons/fa';
 import {Swiper ,SwiperSlide} from 'swiper/react';
 import SwiperCore from 'swiper';
@@ -134,7 +133,7 @@ const BlogDisplayPage = () => {
         {showConfirmation && (
       <div className="fixed inset-0 flex items-center justify-center rounded-lg bg-gray-900 bg-opacity-50">
         <div className="bg-white p-6 rounded-lg shadow">
-          <p className="text-lg text-gray-800">Are you sure you want to delete your account?</p>
+          <p className="text-lg text-gray-800">Are you sure you want to delete your post?</p>
           <div className="mt-4 flex justify-end">
             <button
               onClick={handleDelete}
